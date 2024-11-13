@@ -148,6 +148,7 @@ GEM
     pg (1.5.9)
     psych (5.2.0)
       stringio
+    public_suffix (6.0.1)
     puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -227,6 +228,9 @@ GEM
     timeout (0.4.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    validate_url (1.0.15)
+      activemodel (>= 3.0.0)
+      public_suffix
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -265,6 +269,7 @@ DEPENDENCIES
   shoulda-matchers
   sqlite3 (>= 1.4)
   tzinfo-data
+  validate_url
   web-console (= 4.2.0)
 
 RUBY VERSION

@@ -1,4 +1,5 @@
 require 'factory_bot_rails'
+require 'validate_url/rspec_matcher'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

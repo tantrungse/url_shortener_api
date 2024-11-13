@@ -13,6 +13,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem "rspec-rails"
+  gem "validate_url"
 end
 
 group :development do

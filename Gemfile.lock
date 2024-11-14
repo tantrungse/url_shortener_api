@@ -90,9 +90,6 @@ GEM
     connection_pool (2.4.1)
     crass (1.0.6)
     date (3.4.0)
-    debug (1.9.2)
-      irb (~> 1.10)
-      reline (>= 0.3.8)
     diff-lcs (1.5.1)
     drb (2.2.1)
     erubi (1.13.0)
@@ -260,7 +257,6 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   byebug
-  debug
   factory_bot_rails
   pg
   puma (>= 5.0)

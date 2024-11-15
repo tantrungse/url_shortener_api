@@ -6,7 +6,7 @@ class Api::V1::UrlsController < ApplicationController
     if result[:error]
       render json: { error: result[:error] }, status: result[:status]
     else
-      render json: { short_code: result[:short_code] }, status: result[:status]
+      render json: { short_url: result[:short_url], short_code: result[:short_code] }, status: result[:status]
     end
   end
 end

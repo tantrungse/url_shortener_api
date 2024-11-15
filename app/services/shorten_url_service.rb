@@ -12,7 +12,9 @@ class ShortenUrlService
       url.short_code = generate_unique_short_code
       url.save!
     end
-    { short_code: url.short_code, status: :created }
+    short_url = "#{Rails.application.config.x.base_url}#{url.short_code}"
+
+    { short_url: short_url, short_code: url.short_code, status: :created }
   rescue ActiveRecord::RecordInvalid => e
     { error: e.message, status: :unprocessable_entity }
   end

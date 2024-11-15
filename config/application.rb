@@ -29,6 +29,8 @@ module UrlShortenerApi
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
 
+    config.x.base_url = 'https://url-shortener-api-d47008a21693.herokuapp.com/'
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

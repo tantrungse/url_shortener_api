@@ -22,6 +22,15 @@ RSpec.describe ShortenUrlService do
           expect(first_result[:short_code]).to eq(second_result[:short_code])
           expect(Url.where(original_url: original_url).count).to eq(1)
         end
+
+        it 'returns a short_code of length 7' do
+          service = ShortenUrlService.new(original_url)
+          result = service.call
+  
+          expect(result[:short_code]).to be_present
+          expect(result[:short_code].length).to eq(7)
+          expect(result[:status]).to eq(:created)
+        end
       end
 
       context "but invalid" do

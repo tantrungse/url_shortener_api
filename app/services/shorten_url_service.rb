@@ -21,7 +21,7 @@ class ShortenUrlService
 
   def generate_unique_short_code
     loop do
-      code = SecureRandom.urlsafe_base64(7)
+      code = SecureRandom.urlsafe_base64(5)[0, 7]
       break code unless Url.exists?(short_code: code)
     end
   end

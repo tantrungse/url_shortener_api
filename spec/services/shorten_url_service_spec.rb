@@ -38,7 +38,7 @@ RSpec.describe ShortenUrlService do
           service = ShortenUrlService.new("invalid-url")
           result = service.call
 
-          expect(result[:error]).to eq("Validation failed: Original url is not a valid URL")
+          expect(result[:error]).to eq("Original URL is invalid")
           expect(result[:status]).to eq(:unprocessable_entity)
         end
       end

@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Url, type: :model do
-  let(:url) { build(:url) }
+  let(:url) { Url.create(original_url: "https://example.com/my-original-url", short_code: "abc1234") }
 
-  it 'has a valid factory' do
+  it 'has a valid model' do
     expect(url).to be_valid
   end
 

@@ -16,7 +16,7 @@ class ShortenUrlService
 
     { short_url: short_url, short_code: url.short_code, status: :created }
   rescue ActiveRecord::RecordInvalid => e
-    { error: e.message, status: :unprocessable_entity }
+    { error: 'Original URL is invalid', status: :unprocessable_entity }
   end
 
   private

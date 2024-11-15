@@ -44,7 +44,7 @@ RSpec.describe "Api::V1::Urls", type: :request do
         post api_v1_encode_url, params: { original_url: "invalid-url" }
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include("error" => "Validation failed: Original url is not a valid URL")
+        expect(JSON.parse(response.body)).to include("error" => "Original URL is invalid")
       end
     end
 
@@ -58,6 +58,70 @@ RSpec.describe "Api::V1::Urls", type: :request do
 
         expect(first_response_code).to eq(second_response_code)
         expect(Url.where(original_url: original_url).count).to eq(1)
+      end
+    end
+  end
+
+  describe "GET /decode" do
+    let(:original_url) { "https://example.com/another-long-url" }
+
+    context "when the request is valid" do
+      it "returns the original URL by created short_code" do
+        post api_v1_encode_url, params: { original_url: original_url }
+        response_short_code = JSON.parse(response.body)["short_code"]
+
+        get api_v1_decode_url, params: { short_code: response_short_code }
+        response_original_url = JSON.parse(response.body)["original_url"]
+
+        expect(response).to have_http_status(:success)
+        expect(response_original_url).to eq(original_url)
+      end
+
+      it "returns the same original URLs by the same created short_code" do
+        post api_v1_encode_url, params: { original_url: original_url }
+        response_short_code = JSON.parse(response.body)["short_code"]
+
+        get api_v1_decode_url, params: { short_code: response_short_code }
+        first_response_url = JSON.parse(response.body)["original_url"]
+
+        get api_v1_decode_url, params: { short_code: response_short_code }
+        second_response_url = JSON.parse(response.body)["original_url"]
+
+        expect(first_response_url).to eq(second_response_url)
+        expect(Url.where(original_url: original_url).count).to eq(1)
+      end
+
+      it "handles short_code case sensitivity correctly" do
+        post api_v1_encode_url, params: { original_url: original_url }
+        response_short_code = JSON.parse(response.body)["short_code"]
+  
+        get api_v1_decode_url, params: { short_code: response_short_code.upcase }
+  
+        expect(response).to have_http_status(:not_found)
+        expect(JSON.parse(response.body)).to include("error" => "Short code not found")
+      end
+    end
+
+    context "when the request is invalid" do
+      it "returns an error for missing short_code" do
+        get api_v1_decode_url, params: {}
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("error" => "Short code is required")
+      end
+
+      it "returns an error for blank short_code" do
+        get api_v1_decode_url, params: { short_code: "" }
+  
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("error" => "Short code is required")
+      end
+
+      it "returns an error for not found short_code" do
+        get api_v1_decode_url, params: { short_code: "notfoundcode" }
+
+        expect(response).to have_http_status(:not_found)
+        expect(JSON.parse(response.body)).to include("error" => "Short code not found")
       end
     end
   end

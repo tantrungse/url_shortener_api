@@ -122,4 +122,24 @@ RSpec.describe "Api::V1::Urls", type: :request do
       end
     end
   end
+
+  describe "Rate limiting" do
+    it 'throttles requests to encode endpoint' do
+      31.times do
+        post api_v1_encode_url, params: { original_url: 'http://example.com' }
+      end
+
+      expect(response.status).to eq(429)
+      expect(JSON.parse(response.body)['error']).to eq('Rate limit exceeded. Try again later.')
+    end
+  
+    it 'throttles requests to decode endpoint' do
+      31.times do
+        get api_v1_decode_url, params: { short_url: 'shortcode' }
+      end
+
+      expect(response.status).to eq(429)
+      expect(JSON.parse(response.body)['error']).to eq('Rate limit exceeded. Try again later.')
+    end
+  end
 end

@@ -9,6 +9,7 @@ gem "factory_bot_rails"
 gem "pg"
 gem "validate_url"
 gem "rack-cors"
+gem "rack-attack"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]

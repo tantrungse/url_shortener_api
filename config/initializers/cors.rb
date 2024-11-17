@@ -9,10 +9,10 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "http://localhost:3001"
 
-    resource "api/v1/encode",
+    resource "/api/v1/encode",
       headers: :any,
       methods: [:post, :options]
-    resource "api/v1/decode",
+    resource "/api/v1/decode",
       headers: :any,
       methods: [:get, :options]
   end

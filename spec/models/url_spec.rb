@@ -11,7 +11,7 @@ RSpec.describe Url, type: :model do
     let(:url) { create(:url) }
 
     it { is_expected.to validate_presence_of(:original_url) }
-    it { is_expected.to validate_uniqueness_of(:original_url) }
+    it { is_expected.to validate_uniqueness_of(:original_url).case_insensitive }
     it { is_expected.to validate_url_of(:original_url) }
     it { is_expected.to validate_uniqueness_of(:short_code) }
     it { expect(url.short_code.length).to eq(7) }
@@ -45,5 +45,19 @@ RSpec.describe Url, type: :model do
     it 'returns full shortened url' do
       expect(url.short_url).to eq("#{Rails.application.config.x.base_url}#{url.short_code}")
     end
+  end
+
+  describe 'URL normalization' do
+    it 'normalizes URLs to a consistent format' do
+      url = create(:url, original_url: 'https://www.example.com/')
+      expect(url.original_url).to eq('https://example.com')
+    end
+
+    it 'converts the host to lowercase' do
+      url = create(:url, original_url: 'HTTPS://Example.COM/MyPage')
+      expect(url.original_url).to eq('https://example.com/MyPage')
+    end
+
+
   end
 end

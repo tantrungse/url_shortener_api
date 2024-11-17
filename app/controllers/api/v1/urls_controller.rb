@@ -1,23 +1,25 @@
 class Api::V1::UrlsController < ApplicationController
   def encode
-    service = ShortenUrlService.new(params[:original_url])
-    result = service.call
+    original_url = params[:original_url]
+    return render json: { error: 'Original URL is required' }, status: :unprocessable_entity if original_url.blank?
 
-    if result[:error]
-      render json: { error: result[:error] }, status: result[:status]
-    else
-      render json: { short_url: result[:short_url], short_code: result[:short_code] }, status: result[:status]
-    end
+    url = Url.find_or_initialize_by(original_url: original_url)
+    url.save!
+
+    render json: { short_url: url.short_url }, status: :created
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { error: 'Original URL is invalid' }, status: :unprocessable_entity
   end
 
   def decode
-    short_code = params[:short_code]
-    return render json: { error: 'Short code is required'}, status: :unprocessable_entity if short_code.blank?
+    short_url = params[:short_url]
+    return render json: { error: 'Short url is required' }, status: :unprocessable_entity if short_url.blank?
 
+    short_code = short_url.split('/').last
     url = Url.find_by!(short_code: short_code)
 
-    render json: { original_url: url.original_url}, status: :ok
+    render json: { original_url: url.original_url }, status: :ok
   rescue ActiveRecord::RecordNotFound => e
-    render json: { error: 'Short code not found' }, status: :not_found
+    render json: { error: 'Short url not found' }, status: :not_found
   end
 end

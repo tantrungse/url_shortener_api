@@ -23,6 +23,14 @@ RSpec.describe Url, type: :model do
       expect(url).not_to be_valid
       expect(url.errors[:short_code]).to include("can't be blank")
     end
+
+    it 'is invalid with a URL longer than 2048 characters' do
+      long_url = "http://example.com/#{'a' * 2035}"
+
+      url = Url.new(original_url: long_url)
+      expect(url).not_to be_valid
+      expect(url.errors[:original_url]).to include("is too long (maximum is 2048 characters)")
+    end
   end
 
   describe 'short_code' do
@@ -57,7 +65,5 @@ RSpec.describe Url, type: :model do
       url = create(:url, original_url: 'HTTPS://Example.COM/MyPage')
       expect(url.original_url).to eq('https://example.com/MyPage')
     end
-
-
   end
 end

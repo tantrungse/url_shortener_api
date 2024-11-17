@@ -43,6 +43,14 @@ RSpec.describe "Api::V1::Urls", type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to include("error" => "Original url is invalid")
       end
+
+      it 'rejects URLs longer than 2048 characters' do
+        long_url = "http://example.com/#{'a' * 2035}"
+        post api_v1_encode_url, params: { original_url: long_url }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("error" => "Original url is too long")
+      end
     end
 
     context "when the same URL is encoded multiple times" do

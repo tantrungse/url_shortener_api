@@ -1,9 +1,10 @@
 class Api::V1::UrlsController < ApplicationController
   def encode
     original_url = params[:original_url]
-    normalized_url = Url.new.normalize_original_url(original_url)
     return render json: { error: 'Original url is required' }, status: :unprocessable_entity if original_url.blank?
+    return render json: { error: 'Original url is too long' }, status: :unprocessable_entity if original_url.length > Url::MAX_URL_LENGTH
 
+    normalized_url = Url.new.normalize_original_url(original_url)
     url = Url.find_or_initialize_by(original_url: normalized_url)
     url.save!
 

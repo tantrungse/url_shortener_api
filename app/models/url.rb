@@ -1,8 +1,10 @@
 class Url < ApplicationRecord
+  MAX_URL_LENGTH = 2048
+
   before_validation :normalize_original_url
   before_validation :set_uniq_short_code, on: :create
 
-  validates :original_url, presence: true, uniqueness: { case_sensitive: false }, url: true
+  validates :original_url, presence: true, uniqueness: { case_sensitive: false }, url: true, length: { maximum: MAX_URL_LENGTH }
   validates :short_code, presence: true, uniqueness: true
 
   def short_url

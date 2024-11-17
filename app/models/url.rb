@@ -9,9 +9,7 @@ class Url < ApplicationRecord
     "#{Rails.application.config.x.base_url}#{short_code}" if short_code.present?
   end
 
-  private
-
-  def normalize_original_url
+  def normalize_original_url(original_url = self.original_url)
     return if original_url.blank?
 
     uri = URI.parse(original_url.strip)
@@ -19,8 +17,10 @@ class Url < ApplicationRecord
     normalized = "#{uri&.scheme}://#{host&.downcase}#{uri&.path}".chomp('/')
     self.original_url = normalized
   rescue URI::InvalidURIError
-    errors.add(:base, 'Original URL is invalid')
+    errors.add(:base, 'Original url is invalid')
   end
+
+  private
 
   def set_uniq_short_code
     self.short_code ||= generate_unique_short_code

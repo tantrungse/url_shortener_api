@@ -34,14 +34,14 @@ RSpec.describe "Api::V1::Urls", type: :request do
         post api_v1_encode_url, params: {}
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include("error" => "Original URL is required")
+        expect(JSON.parse(response.body)).to include("error" => "Original url is required")
       end
 
       it "returns an error for an invalid url" do
         post api_v1_encode_url, params: { original_url: "invalid-url" }
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include("error" => "Original URL is invalid")
+        expect(JSON.parse(response.body)).to include("error" => "Original url is invalid")
       end
     end
 

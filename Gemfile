@@ -8,6 +8,7 @@ gem "bootsnap", require: false
 gem "factory_bot_rails"
 gem "pg"
 gem "validate_url"
+gem "rack-cors"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
